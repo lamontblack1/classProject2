@@ -1,0 +1,13 @@
+{
+    "extends": [
+        "eslint:recommended, prettier"
+    ],
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "node": true
+    },
+    "rules": {
+        "camelcase": "error"
+    }
+}
