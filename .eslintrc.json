@@ -1,13 +1,18 @@
 {
-    "extends": [
-        "eslint:recommended, prettier"
-    ],
+   
     "env": {
         "browser": true,
         "commonjs": true,
-        "node": true
+        "node": true,
+        "jquery": true,
+        "mocha": true
     },
+        "extends": "prettier",
+        "plugins": [
+            "prettier"
+        ],
     "rules": {
-        "camelcase": "error"
+        "camelcase": "error",
+        "no-console": "off"
     }
 }

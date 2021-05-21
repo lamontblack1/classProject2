@@ -2,13 +2,13 @@
   "development": {
     "username": "root",
     "password": "passphrase",
-    "database": "exampledb",
+    "database": "flcceDB",
     "host": "localhost",
     "dialect": "mysql"
   },
   "test": {
     "username": "root",
-    "password": null,
+    "password": "passphrase",
     "database": "testdb",
     "host": "localhost",
     "dialect": "mysql",

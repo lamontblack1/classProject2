@@ -4,7 +4,7 @@
   "description": "an app that tracks assessments for my condo association",
   "main": "server.js",
   "scripts": {
-    "test": "npm run lint && cross-env NODE_ENV=test mocha -u tdd --reporter spec --exit",
+    "test": "npm run lint && cross-env NODE_ENV=test mocha",
     "start": "node server.js",
     "lint": "eslint --quiet .",
     "fix": "eslint --fix ."
