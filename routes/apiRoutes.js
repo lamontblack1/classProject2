@@ -40,10 +40,49 @@ module.exports = function (app) {
     });
   });
 
-  // Get all subDepts
+  // Get all subDepts with dept name included
   app.get("/api/subdepts", function (req, res) {
-    db.SubDept.findAll({}).then(function (dbSubDepts) {
+    db.SubDept.findAll({ include: [db.dept] }).then(function (dbSubDepts) {
       res.json(dbSubDepts);
+    });
+  });
+
+  // Get all subDepts with dept name included
+  app.get("/api/subdeptsbydept/:deptId", function (req, res) {
+    const deptId = parseInt(req.params.deptId);
+    const objWhere = { deptId: deptId };
+    console.log("***************************");
+    console.log(objWhere);
+    db.SubDept.findAll({
+      where: objWhere,
+      include: [db.Dept],
+    }).then(function (dbSubDepts) {
+      res.json(dbSubDepts);
+    });
+  });
+
+  // Get all transactions (Money) with dept name included
+  app.get("/api/transacts", function (req, res) {
+    db.Money.findAll({
+      include: [db.SubDept, db.Dept, db.ForMonth],
+      order: [["itemDate", "DESC"]],
+    }).then(function (dbMoney) {
+      res.json(dbMoney);
+    });
+  });
+
+  //create a new Money
+  app.post("/api/transacts", function (req, res) {
+    db.Money.create(req.body).then(function (dbSubDepts) {
+      //send success message, html will location.reload
+      res.json(dbSubDepts);
+    });
+  });
+
+  // Delete a Money by id
+  app.delete("/api/transacts/:id", function (req, res) {
+    db.Money.destroy({ where: { id: req.params.id } }).then(function (dbMoney) {
+      res.json(dbMoney);
     });
   });
 

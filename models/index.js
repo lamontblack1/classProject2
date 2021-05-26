@@ -44,7 +44,7 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 //make all associations here before exporting
-//Dept
+//Dept -
 db.Money.belongsTo(db.Dept, {
   foreignKey: "deptId",
 });

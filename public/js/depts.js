@@ -1,8 +1,11 @@
 $(document).ready(function () {
-  // Getting a reference to the input field where user adds a new todo
+  // Getting a reference to the input field where user adds a new dept
   var $newItemInput = $("input.new-item");
-  // Our new todos will go inside the todoContainer
+  var $newSubItemInput = $("input.new-sub-item");
+  var $newSubItemDeptInput = $("input.new-sub-item-dept");
+  // Our new depts will go inside the dept-container
   var $deptContainer = $(".dept-container");
+  var $subDeptContainer = $(".subDept-container");
 
   const $newDeptForSubDeptInput = $("#deptDropdown");
   // Adding event listeners for deleting, editing, and adding todos
@@ -13,26 +16,46 @@ $(document).ready(function () {
   $(document).on("blur", ".dept-item", cancelEdit);
   $(document).on("submit", "#dept-form", insertDept);
 
+  // $(document).on("click", "button.deleteSubDept", deleteSubDept);
+  // $(document).on("click", "button.complete", toggleComplete);
+  $(document).on("click", ".sub-dept-item", editSubDept);
+  $(document).on("keyup", ".sub-dept-item", finishSubDeptEdit);
+  $(document).on("blur", ".sub-dept-item", cancelSubDeptEdit);
+  $(document).on("submit", "#subDept-form", insertSubDept);
+
   //still must add same functionality for subDepts list, plus making forDept dropdown list
 
   // Our initial todos array
   var depts = [];
+  var subDepts = [];
 
   // Getting depts from database when page loads
   getDepts();
+  getSubDepts();
 
   // This function resets the depts displayed with new depts from the database, and populates the deptDropdown
   function initializeRows() {
     $deptContainer.empty();
+    // also use this function to populate the dropdown used for associating subDepts with depts
     $newDeptForSubDeptInput.empty();
     var rowsToAdd = [];
     for (var i = 0; i < depts.length; i++) {
       rowsToAdd.push(createNewRow(depts[i]));
 
       // deal with deptDropdown
+      //****************************************************************still have to add deptId to data
       $newDeptForSubDeptInput.append("<option>" + depts[i].dept + "</option>");
     }
     $deptContainer.prepend(rowsToAdd);
+  }
+
+  function initializeSubDeptRows() {
+    $subDeptContainer.empty();
+    var rowsToAdd = [];
+    for (var i = 0; i < subDepts.length; i++) {
+      rowsToAdd.push(createNewSubDeptRow(subDepts[i]));
+    }
+    $subDeptContainer.prepend(rowsToAdd);
   }
 
   // This function grabs depts from the database and updates the view
@@ -43,7 +66,14 @@ $(document).ready(function () {
     });
   }
 
-  // This function deletes a todo when the user clicks the delete button
+  function getSubDepts() {
+    $.get("/api/subdepts", function (data) {
+      subDepts = data;
+      initializeSubDeptRows();
+    });
+  }
+
+  // This function deletes a subDept when the user clicks the delete button
   // function deleteDept(event) {
   //   event.stopPropagation();
   //   var id = $(this).data("id");
@@ -60,6 +90,14 @@ $(document).ready(function () {
     $(this).children("input.edit").val(currentDept.dept);
     $(this).children("input.edit").show();
     $(this).children("input.edit").focus();
+  }
+
+  function editSubDept() {
+    var currentSubDept = $(this).data("sub-dept");
+    $(this).children().hide();
+    $(this).children("sub-input.edit").val(currentSubDept.subDept);
+    $(this).children("sub-input.edit").show();
+    $(this).children("sub-input.edit").focus();
   }
 
   // Toggles complete status
@@ -81,6 +119,15 @@ $(document).ready(function () {
     }
   }
 
+  function finishSubDeptEdit(event) {
+    var updatedSubDept = $(this).data("sub-dept");
+    if (event.which === 13) {
+      updatedSubDept.text = $(this).children("input").val().trim();
+      $(this).blur();
+      updateSubDept(updatedSubDept);
+    }
+  }
+
   // This function updates a dept in our database
   function updateDept(dept) {
     $.ajax({
@@ -90,13 +137,33 @@ $(document).ready(function () {
     }).then(getDept);
   }
 
+  function updateSubDept(subDept) {
+    $.ajax({
+      method: "PUT",
+      url: "/api/subdept",
+      data: subDept,
+    }).then(getSubDept);
+  }
+
+  //left off here
+
   // This function is called whenever a todo item is in edit mode and loses focus
   // This cancels any edits being made
   function cancelEdit() {
     var currentDept = $(this).data("dept");
     if (currentDept) {
       $(this).children().hide();
-      $(this).children("input.edit").val(currentDept.text);
+      $(this).children("input.edit").val(currentDept.dept);
+      $(this).children("span").show();
+      $(this).children("button").show();
+    }
+  }
+
+  function cancelSubDeptEdit() {
+    var currentSubDept = $(this).data("subDept");
+    if (currentSubDept) {
+      $(this).children().hide();
+      $(this).children("input.edit").val(currentSubDept.subDept);
       $(this).children("span").show();
       $(this).children("button").show();
     }
@@ -124,6 +191,29 @@ $(document).ready(function () {
     return $newInputRow;
   }
 
+  function createNewSubDeptRow(subDeptInfo) {
+    // console.log(deptInfo);
+    var $newInputRow = $(
+      [
+        "<tr>",
+        "<th>",
+        subDeptInfo.Dept.dept,
+        "</th>",
+        "<th>",
+        subDeptInfo.subDept,
+        "</th>",
+        // "<button class='delete btn btn-danger'>x</button>",
+        "</tr>",
+      ].join("")
+    );
+
+    $newInputRow.find("button.delete").data("id", subDeptInfo.id);
+    $newInputRow.find("input.edit").css("display", "none");
+    $newInputRow.data("dept", subDeptInfo);
+
+    return $newInputRow;
+  }
+
   // This function inserts a new dept into our database and then updates the view
   function insertDept(event) {
     event.preventDefault();
@@ -133,5 +223,17 @@ $(document).ready(function () {
 
     $.post("/api/depts", dept, getDepts);
     $newItemInput.val("");
+  }
+
+  function insertSubDept(event) {
+    event.preventDefault();
+    var subDept = {
+      subDept: $newSubItemDeptInput.val().trim(),
+      dept: $newSubItemInput.val().trim(),
+    };
+
+    $.post("/api/subdepts", subDept, getSubDepts);
+    $newSubItemDeptInput.val("");
+    $newSubItemInput.val("");
   }
 });
