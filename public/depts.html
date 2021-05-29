@@ -14,18 +14,18 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light mb-3">
-        <a class="navbar-brand">FLCCE</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
-            aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <a class="navbar-brand" href="#">FLCCE</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarText">
+        <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Sign In</a>
+                    <a class="nav-link" href="/login">Sign In</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/api/residents">Residents</a>
@@ -51,10 +51,10 @@
                         <form id="dept-form">
                             <div class="container">
                                 <div class="row">
-                                    <div class="col-9">
+                                    <div class="col-8">
                                         <input class="new-item form-control" placeholder="Add a Dept" type="text" />
                                     </div>
-                                    <div class="col-3">
+                                    <div class="col-4"  >
                                         <button type="submit" class="btn btn-info">Add Dept</button>
                                     </div>
                                 </div>
@@ -75,10 +75,10 @@
                                     <div class="col-10">
                                         <select id="deptDropdown" class="new-sub-item-dept form-control mb-1" placeholder="In what Dept?" >
                                         </select>
-                                        <input class="new-sub-item form-control" placeholder="Add a Sub Dept" type="text" />
+                                        <input id="newSubDeptInput" class="new-sub-item form-control" placeholder="Add a Sub Dept" type="text" />
                                     </div>
                                     <div class="col-2">
-                                        <button type="submit" class="btn btn-info">Add Sub Dept</button>
+                                        <button id="submitNewSubDept" type="submit" class="btn btn-info">Add Sub Dept</button>
                                     </div>
                                 </div>
                             </div>

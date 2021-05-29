@@ -17,7 +17,8 @@ describe("GET /api/residents", function () {
     return db.sequelize.sync({ force: true });
   });
 
-  it("should find all examples", function (done) {
+  //resident api renders a view, does not return json, so use a duplicate residenttest route
+  it("api residentstest should find all examples", function (done) {
     // Add some examples to the db to test with
     db.Resident.bulkCreate([
       { unitNo: "2503-1", ownerLastName: "Black" },
@@ -25,7 +26,7 @@ describe("GET /api/residents", function () {
       { unitNo: "2503-3", ownerLastName: "Green" },
     ]).then(function () {
       // Request the route that returns all examples
-      request.get("/api/residents").end(function (err, res) {
+      request.get("/api/residentstest").end(function (err, res) {
         var responseStatus = res.status;
         var responseBody = res.body;
 
@@ -42,8 +43,8 @@ describe("GET /api/residents", function () {
           .that.includes({ unitNo: "2503-3", ownerLastName: "Green" });
 
         expect(responseBody[1]).to.be.an("object").that.includes({
-          text: "2503-2",
-          description: "Brown",
+          unitNo: "2503-2",
+          ownerLastName: "Brown",
         });
 
         // The `done` function is used to end any asynchronous tests

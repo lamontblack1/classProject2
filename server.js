@@ -3,6 +3,9 @@ var express = require("express");
 var exphbs = require("express-handlebars");
 
 var db = require("./models");
+const session = require("express-session");
+const flash = require("connect-flash");
+const passport = require("./config/passport.js");
 
 var app = express();
 var PORT = process.env.PORT || 3000;
@@ -12,11 +15,30 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static("public"));
 
+// this is for session
+app.use(
+  session({
+    cookie: {
+      maxAge: 600000
+    },
+    secret: "some secret",
+    resave: false,
+    saveUninitialized: true
+  })
+);
+
+// this is for flash
+app.use(flash());
+
+//this is for passport
+app.use(passport.initialize());
+app.use(passport.session());
+
 // Handlebars
 app.engine(
   "handlebars",
   exphbs({
-    defaultLayout: "main",
+    defaultLayout: "main"
   })
 );
 app.set("view engine", "handlebars");

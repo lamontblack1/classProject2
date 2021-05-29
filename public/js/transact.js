@@ -43,12 +43,12 @@ $(document).ready(function () {
       return;
     }
     //get the date and convert it to SQL format
-    let dt = DateTime.fromFormat($("#itemDate").val().trim(), "M/d/yyyy");
+    let myDate = DateTime.fromFormat($("#itemDate").val().trim(), "M/d/yyyy");
     const newTransact = {
       incomeOrExpense: $("#incomeOrExpense").val().trim(),
       amount: $("#amount").val().trim(),
       invoiceNo: $("#invoiceNo").val().trim(),
-      itemDate: dt.toISODate(),
+      itemDate: myDate.toISODate(),
       forMonthId: parseInt($("#forMonth").val()),
       forYear: parseInt($("#forYear").val().trim()),
       deptId: parseInt($("#dept").val().trim()),
@@ -72,14 +72,14 @@ $(document).ready(function () {
 
   // Function for creating a new list row for authors
   function createTransactRow(transactData) {
-    let dt = DateTime.fromISO(transactData.itemDate);
+    let myDate = DateTime.fromISO(transactData.itemDate);
 
     var newTr = $("<tr>");
     newTr.data("transact", transactData);
     newTr.append("<td>" + transactData.incomeOrExpense + "</td>");
     newTr.append("<td>" + transactData.amount + "</td>");
     newTr.append("<td>" + transactData.invoiceNo + "</td>");
-    newTr.append("<td>" + dt.toLocaleString() + "</td>");
+    newTr.append("<td>" + myDate.toLocaleString() + "</td>");
     newTr.append("<td>" + transactData.ForMonth.longMonth + "</td>");
     newTr.append("<td>" + transactData.forYear + "</td>");
     newTr.append("<td>" + transactData.Dept.dept + "</td>");

@@ -1,13 +1,13 @@
 $(document).ready(function () {
   // Getting a reference to the input field where user adds a new dept
   var $newItemInput = $("input.new-item");
-  var $newSubItemInput = $("input.new-sub-item");
-  var $newSubItemDeptInput = $("input.new-sub-item-dept");
+  var $newSubDeptInput = $("#newSubDeptInput");
+  var $newSubItemDeptInput = $("#deptDropdown");
   // Our new depts will go inside the dept-container
   var $deptContainer = $(".dept-container");
   var $subDeptContainer = $(".subDept-container");
 
-  const $newDeptForSubDeptInput = $("#deptDropdown");
+  var $deptForNewSubDeptInput = $("#deptDropdown");
   // Adding event listeners for deleting, editing, and adding todos
   // $(document).on("click", "button.delete", deleteDept);
   // $(document).on("click", "button.complete", toggleComplete);
@@ -37,14 +37,16 @@ $(document).ready(function () {
   function initializeRows() {
     $deptContainer.empty();
     // also use this function to populate the dropdown used for associating subDepts with depts
-    $newDeptForSubDeptInput.empty();
+    $deptForNewSubDeptInput.empty();
     var rowsToAdd = [];
     for (var i = 0; i < depts.length; i++) {
       rowsToAdd.push(createNewRow(depts[i]));
 
       // deal with deptDropdown
       //****************************************************************still have to add deptId to data
-      $newDeptForSubDeptInput.append("<option>" + depts[i].dept + "</option>");
+      $deptForNewSubDeptInput.append(
+        "<option value=" + depts[i].id + ">" + depts[i].dept + "</option>"
+      );
     }
     $deptContainer.prepend(rowsToAdd);
   }
@@ -134,7 +136,7 @@ $(document).ready(function () {
       method: "PUT",
       url: "/api/dept",
       data: dept,
-    }).then(getDept);
+    }).then(getDepts);
   }
 
   function updateSubDept(subDept) {
@@ -142,7 +144,7 @@ $(document).ready(function () {
       method: "PUT",
       url: "/api/subdept",
       data: subDept,
-    }).then(getSubDept);
+    }).then(getSubDepts);
   }
 
   //left off here
@@ -227,13 +229,12 @@ $(document).ready(function () {
 
   function insertSubDept(event) {
     event.preventDefault();
-    var subDept = {
-      subDept: $newSubItemDeptInput.val().trim(),
-      dept: $newSubItemInput.val().trim(),
+    var newSubDept = {
+      subDept: $newSubDeptInput.val().trim(),
+      deptId: $newSubItemDeptInput.val().trim(),
     };
-
-    $.post("/api/subdepts", subDept, getSubDepts);
+    $.post("/api/subdepts", newSubDept, getSubDepts);
+    $newSubDeptInput.val("");
     $newSubItemDeptInput.val("");
-    $newSubItemInput.val("");
   }
 });

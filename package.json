@@ -4,10 +4,10 @@
   "description": "an app that tracks assessments for my condo association",
   "main": "server.js",
   "scripts": {
-    "test": "npm run lint && cross-env NODE_ENV=test mocha",
     "start": "node server.js",
     "lint": "eslint --quiet .",
-    "fix": "eslint --fix ."
+    "fix": "eslint --fix .",
+    "test": "npm run lint && cross-env NODE_ENV=test mocha -u tdd --reporter spec --exit"
   },
   "repository": {
     "type": "git",
@@ -34,10 +34,15 @@
     "sequelize-cli": "^6.2.0"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "connect-flash": "^0.1.1",
     "dotenv": "^9.0.2",
     "express": "^4.17.1",
     "express-handlebars": "^5.3.2",
+    "express-session": "^1.17.2",
     "mysql2": "^2.2.5",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
     "sequelize": "^6.6.2"
   }
 }

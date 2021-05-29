@@ -1,5 +1,8 @@
 {
-   
+    "extends": [
+        "eslint:recommended",
+        "prettier"
+    ],
     "env": {
         "browser": true,
         "commonjs": true,
@@ -7,12 +10,23 @@
         "jquery": true,
         "mocha": true
     },
-        "extends": "prettier",
-        "plugins": [
-            "prettier"
-        ],
+    "plugins": [
+        "prettier"
+    ],
     "rules": {
-        "camelcase": "error",
-        "no-console": "off"
+        "no-unused-vars": [
+            "error",
+            {
+                "args": "none"
+            }
+        ],
+        "no-console": "off",
+        "no-restricted-syntax": [
+            "error",
+            {
+                "selector": "CallExpression[callee.object.name='console'][callee.property.name!=/^(log|warn|error|info|trace)$/]",
+                "message": "Unexpected property on console object was called"
+            }
+        ]
     }
 }

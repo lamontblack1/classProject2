@@ -1,5 +1,5 @@
 module.exports = function (sequelize, DataTypes) {
-  const Resident = sequelize.define("Resident", {
+  var Resident = sequelize.define("Resident", {
     unitNo: {
       type: DataTypes.STRING,
       allowNull: false,
