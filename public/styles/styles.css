@@ -11,7 +11,7 @@ body {
   background-size: 12%;
   background-repeat: no-repeat;
   background-origin: border-box;
-  background-position: 0% 20%;
+  background-position: 0px 125px;
   /* color: rgba(40, 79, 54); */
 }
 
@@ -21,7 +21,7 @@ body {
 
 p {
   font-size: 20px;
-  line-height: 23px;
+  line-height: 26px;
 }
 
 .resident-container {
